@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun Learning Academy</title>
+<style>
+:root{--ink:#24324a;--muted:#66748b;--bg:#f5f8ff;--card:#fff;--purple:#7657df;--pink:#ff7ca8;--blue:#63b8f5;--yellow:#ffd66b;--green:#65c99a;--shadow:0 8px 24px #30456b14}
+*{box-sizing:border-box}body{margin:0;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:#fff;box-shadow:var(--shadow);position:sticky;top:0;z-index:5}.top{max-width:1100px;margin:auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-size:1.25rem;font-weight:900;color:var(--purple);cursor:pointer}.points{background:#fff5cf;border-radius:30px;padding:9px 14px;font-weight:800}
+nav{display:flex;gap:7px;flex-wrap:wrap}.navbtn,.btn{border:0;border-radius:14px;padding:10px 14px;font-weight:800;cursor:pointer;background:#eeeaff;color:#5c48b5}.navbtn.active,.btn.primary{background:var(--purple);color:white}.btn{background:#eaf4ff;color:#35658d}.btn:disabled{opacity:.45;cursor:not-allowed}
+main{max-width:1100px;margin:28px auto;padding:0 20px 60px}.hero{background:linear-gradient(120deg,#e8e1ff,#e3f5ff 65%,#fff0f5);border-radius:28px;padding:30px;display:flex;align-items:center;justify-content:space-between;gap:20px;box-shadow:var(--shadow)}.hero h1{font-size:clamp(2rem,5vw,3.2rem);margin:0 0 8px}.hero p{color:var(--muted);font-size:1.05rem}.mascot{font-size:5rem;background:#fff;border-radius:28px;padding:18px}
+h2{margin:28px 0 14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}.card{background:var(--card);border-radius:22px;padding:20px;box-shadow:var(--shadow);border:2px solid transparent}.subject{cursor:pointer;transition:.18s}.subject:hover{transform:translateY(-4px);border-color:#d8ceff}.emoji{font-size:2.6rem}.card h3{margin:8px 0 5px}.muted{color:var(--muted)}.small{font-size:.9rem}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.panel{background:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow);margin-top:18px}.lessonbox{background:#f2efff;border-radius:18px;padding:18px;margin:14px 0}.question{font-size:1.4rem;font-weight:900;margin:15px 0}.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}.answer{background:#f0f6ff;border:2px solid #dceaff;padding:15px;border-radius:15px;font-weight:900;font-size:1.1rem;cursor:pointer}.answer:hover{border-color:var(--purple)}.feedback{min-height:28px;font-weight:800;margin:12px 0}.progress{height:12px;background:#edf0f7;border-radius:20px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green);width:0;transition:.3s}.prize{display:flex;flex-direction:column;gap:8px}.price{font-weight:900;color:#9a6a00}.tag{display:inline-block;background:#eef8f2;color:#27865b;padding:5px 10px;border-radius:20px;font-size:.8rem;font-weight:800}
+footer{text-align:center;color:var(--muted);padding:25px}
+@media(max-width:600px){.hero{padding:22px}.mascot{font-size:3.3rem}.top{align-items:flex-start}.brand{width:100%}nav{width:100%}.navbtn{flex:1;padding:9px 7px;font-size:.83rem}}
+</style>
+</head>
+<body>
+<header><div class="top">
+  <div class="brand" onclick="go('home')">🌈 Fun Learning Academy</div>
+  <nav id="nav">
+    <button class="navbtn active" data-page="home" onclick="go('home')">Home</button>
+    <button class="navbtn" data-page="progress" onclick="go('progress')">My Progress</button>
+    <button class="navbtn" data-page="shop" onclick="go('shop')">Prize Shop</button>
+    <button class="navbtn" data-page="rewards" onclick="go('rewards')">My Rewards</button>
+  </nav>
+  <div class="points">⭐ <span id="points">0</span> points</div>
+</div></header>
+<main id="app"></main>
+<footer>Learn a little, try a lot, and celebrate every step! 🌟</footer>
+<script>
+const subjects=[
+ {id:'counting',name:'Counting',emoji:'🔢',desc:'Explore numbers from 1 to 100.',lesson:'Counting means saying numbers in order. Let’s count the objects together!',questions:[['How many stars? ⭐ ⭐ ⭐','3',['2','3','4']],['What number comes after 6?','7',['5','7','9']],['What number comes before 10?','9',['8','9','11']]]},
+ {id:'addition',name:'Addition',emoji:'🍎',desc:'Put groups together to add.',lesson:'Addition means putting groups together. The plus sign (+) tells us to add.',questions:[['2 + 3 = ?','5',['4','5','6']],['4 + 1 = ?','5',['3','5','7']],['6 + 2 = ?','8',['7','8','9']]]},
+ {id:'subtraction',name:'Subtraction',emoji:'➖',desc:'Take away and find what remains.',lesson:'Subtraction means taking something away. The minus sign (−) tells us to subtract.',questions:[['5 − 2 = ?','3',['2','3','4']],['7 − 3 = ?','4',['3','4','5']],['9 − 1 = ?','8',['7','8','9']]]},
+ {id:'multiplication',name:'Multiplication',emoji:'✖️',desc:'Make equal groups and count them.',lesson:'Multiplication is a quick way to add equal groups. 3 × 2 means three groups of two.',questions:[['2 × 3 = ?','6',['5','6','8']],['4 × 2 = ?','8',['6','8','10']],['5 × 2 = ?','10',['7','10','12']]]},
+ {id:'division',name:'Division',emoji:'🍪',desc:'Share things equally.',lesson:'Division means sharing equally. 6 ÷ 2 means sharing 6 things into 2 equal groups.',questions:[['6 ÷ 2 = ?','3',['2','3','4']],['8 ÷ 4 = ?','2',['1','2','4']],['10 ÷ 2 = ?','5',['4','5','6']]]},
+ {id:'colors',name:'Colors',emoji:'🎨',desc:'Discover colors all around you.',lesson:'Colors help us describe what we see. Red, blue, yellow, green, orange, purple, pink, black, and white are common colors.',questions:[['What color is a banana?','Yellow',['Blue','Yellow','Purple']],['What color is grass usually?','Green',['Green','Pink','Black']],['Mixing red and blue paint makes which color?','Purple',['Orange','Purple','Green']]]},
+ {id:'english',name:'English',emoji:'📚',desc:'Practice letters and simple words.',lesson:'English uses 26 letters. Letters make sounds, and sounds join together to make words.',questions:[['Which letter starts the word APPLE?','A',['A','B','C']],['Which word is an animal?','Cat',['Run','Cat','Blue']],['Choose the opposite of BIG.','Small',['Tall','Small','Fast']]]}
+];
+const prizes=[{id:'stickers',name:'Sticker Pack',emoji:'🌟',cost:50,desc:'A set of cheerful virtual stickers.'},{id:'badge',name:'Shining Badge',emoji:'🏅',cost:100,desc:'A special badge for your collection.'},{id:'trophy',name:'Mini Trophy',emoji:'🏆',cost:150,desc:'Celebrate your learning achievement.'},{id:'avatar',name:'New Mascot Friend',emoji:'🦊',cost:200,desc:'Unlock a friendly character.'},{id:'theme',name:'Rainbow Theme',emoji:'🌈',cost:300,desc:'A colorful profile theme.'},{id:'super',name:'Super Learner Crown',emoji:'👑',cost:500,desc:'A top-tier virtual reward.'}];
+let data=JSON.parse(localStorage.getItem('fla-data')||'null')||{points:0,completed:[],redeemed:[]};
+let current='home',activeSubject=null,qIndex=0,correct=0,answered=false;
+function save(){localStorage.setItem('fla-data',JSON.stringify(data));document.getElementById('points').textContent=data.points}
+function go(page){current=page;document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));render()}
+function render(){
+ const app=document.getElementById('app');
+ if(current==='home') app.innerHTML=homeHTML();
+ if(current==='subject') app.innerHTML=subjectHTML();
+ if(current==='progress') app.innerHTML=progressHTML();
+ if(current==='shop') app.innerHTML=shopHTML();
+ if(current==='rewards') app.innerHTML=rewardsHTML();
+ save();
+}
+function homeHTML(){return `<section class="hero"><div><h1>Learning is an adventure! 🎉</h1><p>Choose a subject, explore a lesson, and earn points as you learn.</p><button class="btn primary" onclick="go('progress')">See my progress →</button></div><div class="mascot">🦉</div></section><div class="row"><h2>Choose what to learn</h2><span class="tag">${data.completed.length} lessons completed</span></div><div class="grid">${subjects.map(s=>`<article class="card subject" onclick="openSubject('${s.id}')"><div class="emoji">${s.emoji}</div><h3>${s.name}</h3><p class="muted">${s.desc}</p><span class="tag">${data.completed.includes(s.id)?'✓ Completed':'Start learning →'}</span></article>`).join('')}</div><section class="panel row"><div><h3>🎁 Ready for a reward?</h3><p class="muted">Use your points in the Prize Shop.</p></div><button class="btn primary" onclick="go('shop')">Visit Prize Shop</button></section>`}
+function openSubject(id){activeSubject=subjects.find(s=>s.id===id);qIndex=0;correct=0;answered=false;current='subject';render()}
+function subjectHTML(){let s=activeSubject;if(!s)return homeHTML();return `<div class="row"><button class="btn" onclick="go('home')">← All subjects</button><span class="tag">${s.emoji} ${s.name}</span></div><section class="panel"><h1>${s.emoji} ${s.name}</h1><p class="muted">${s.desc}</p><div class="lessonbox"><h3>📖 Mini lesson</h3><p>${s.lesson}</p><p><b>Remember:</b> Take your time. You can do it!</p></div><h2>Practice quiz</h2><div class="progress"><span style="width:${qIndex/s.questions.length*100}%"></span></div><p class="small muted">Question ${Math.min(qIndex+1,s.questions.length)} of ${s.questions.length}</p>${qIndex<s.questions.length?questionHTML(s):finishHTML(s)}</section>`}
+function questionHTML(s){let q=s.questions[qIndex];return `<div class="question">${q[0]}</div><div class="answers">${q[2].map(a=>`<button class="answer" onclick="choose('${a.replace(/'/g,"\\'")}')">${a}</button>`).join('')}</div><div id="feedback" class="feedback"></div><button id="next" class="btn primary" style="display:none" onclick="nextQuestion()">Next question →</button>`}
+function choose(answer){if(answered)return;answered=true;let q=activeSubject.questions[qIndex],ok=answer===q[1];if(ok){correct++;data.points+=5;document.getElementById('feedback').textContent='🎉 Great job! +5 points';}else{document.getElementById('feedback').textContent='💛 Good try! The correct answer is '+q[1]+'.';}document.querySelectorAll('.answer').forEach(b=>b.disabled=true);document.getElementById('next').style.display='inline-block';save()}
+function nextQuestion(){qIndex++;answered=false;render()}
+function finishHTML(s){let bonus=correct===s.questions.length?20:0;let already=data.completed.includes(s.id);if(!window.finishHandled){if(!already){data.points+=10+bonus;data.completed.push(s.id)}window.finishHandled=true;save()}return `<div class="lessonbox"><h2>🎊 You finished ${s.name}!</h2><p>You answered ${correct} out of ${s.questions.length} questions correctly.</p><p><b>${already?'This lesson was already completed.':`You earned ${10+bonus} extra points!`}</b> ${bonus?'Perfect score bonus included!':''}</p><button class="btn primary" onclick="window.finishHandled=false;go('home')">Back to subjects</button></div>`}
+function progressHTML(){return `<h1>📈 My Progress</h1><section class="panel"><div class="row"><div><p class="muted">Your points balance</p><div style="font-size:2.4rem;font-weight:900">⭐ ${data.points}</div></div><div><p class="muted">Lessons completed</p><div style="font-size:2.4rem;font-weight:900">${data.completed.length}/7</div></div></div><h2>Subject progress</h2>${subjects.map(s=>`<p><b>${s.emoji} ${s.name}</b> <span class="muted">${data.completed.includes(s.id)?'Completed':'Not completed yet'}</span></p><div class="progress"><span style="width:${data.completed.includes(s.id)?'100':'0'}%"></span></div>`).join('<br>')}<p class="muted small">Complete a subject quiz to mark that subject as finished. Each quiz answer earns 5 points, and finishing a subject earns 10 bonus points. A perfect quiz earns 20 extra points.</p></section>`}
+function shopHTML(){return `<h1>🎁 Prize Shop</h1><p class="muted">Spend your points on fun virtual rewards. Redeemed prizes will appear in My Rewards.</p><div class="grid">${prizes.map(p=>`<article class="card prize"><div class="emoji">${p.emoji}</div><h3>${p.name}</h3><p class="muted">${p.desc}</p><div class="price">⭐ ${p.cost} points</div><button class="btn primary" ${data.points<p.cost?'disabled':''} onclick="redeem('${p.id}')">Redeem</button></article>`).join('')}</div>`}
+function redeem(id){let p=prizes.find(x=>x.id===id);if(data.points<p.cost){alert('You need more points. Complete another activity to earn them!');return}if(!confirm(`Redeem ${p.name} for ${p.cost} points?`))return;data.points-=p.cost;data.redeemed.push({id:p.id,name:p.name,emoji:p.emoji,cost:p.cost,date:new Date().toLocaleDateString()});save();render();alert('🎉 Reward redeemed! Find it in My Rewards.')}
+function rewardsHTML(){return `<h1>🏆 My Rewards</h1><p class="muted">Here are the prizes you have redeemed.</p>${data.redeemed.length?`<div class="grid">${data.redeemed.map(p=>`<article class="card"><div class="emoji">${p.emoji}</div><h3>${p.name}</h3><span class="tag">Redeemed</span><p class="muted small">${p.cost} points · ${p.date}</p></article>`).join('')}</div>`:`<section class="panel"><div class="emoji">🎈</div><h3>Your reward shelf is waiting!</h3><p class="muted">Visit the Prize Shop and redeem a prize with your points.</p><button class="btn primary" onclick="go('shop')">Go to Prize Shop</button></section>`}`}
+render();
+</script>
+</body>
+</html>
